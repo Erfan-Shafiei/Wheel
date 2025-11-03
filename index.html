@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>سامانه قرعه‌کشی پیشرفته</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@30.1.0/dist/font-face.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+
+<body class="light-theme">
+    <!-- ذرات متحرک در پس‌زمینه -->
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <header>
+            <div class="header-left">
+                <h1>سامانه قرعه‌کشی پیشرفته</h1>
+                <p>قرعه‌کشی هوشمند با قابلیت‌های متنوع و گزارش‌گیری کامل</p>
+            </div>
+            <div class="theme-selector">
+                <span>تم:</span>
+                <div class="theme-btn theme-light active" data-theme="light"></div>
+                <div class="theme-btn theme-dark" data-theme="dark"></div>
+                <div class="theme-btn theme-colorful" data-theme="colorful"></div>
+                <div class="theme-btn high-contrast" data-theme="high-contrast"
+                    style="background: linear-gradient(135deg, #000, #fff);"></div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="left-panel">
+                <!-- پنل وضعیت -->
+                <section class="status-panel">
+                    <h2>وضعیت عملیات</h2>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                    <div class="status-items">
+                        <div class="status-item">
+                            <span>آخرین قرعه‌کشی:</span>
+                            <span id="lastDrawTime">--</span>
+                        </div>
+                        <div class="status-item">
+                            <span>وضعیت:</span>
+                            <span id="systemStatus">آماده</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="upload-section" id="dropzone">
+                    <div class="upload-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 3v9" stroke="#5b8cff" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke="#5b8cff" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <h3>فایل اکسل را بارگذاری کنید</h3>
+                    <p>ستون دوم (B) و سوم (C) از <strong>ردیف دوم</strong> به بعد خوانده می‌شوند (ردیف اول هدر است)</p>
+                    <div class="btn-group">
+                        <label class="btn" for="fileInput" id="fileInputLabel">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            انتخاب فایل
+                        </label>
+                        <button class="btn btn-secondary" id="exampleBtn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon>
+                                <line x1="12" y1="22" x2="12" y2="15.5"></line>
+                                <polyline points="22 8.5 12 15.5 2 8.5"></polyline>
+                                <polyline points="2 15.5 12 8.5 22 15.5"></polyline>
+                                <line x1="12" y1="2" x2="12" y2="8.5"></line>
+                            </svg>
+                            مثال نمونه
+                        </button>
+                    </div>
+                    <input type="file" accept=".xlsx" id="fileInput" style="display:none">
+
+                    <!-- پیش‌نمایش فایل -->
+                    <div class="file-preview" id="filePreview" style="display: none;">
+                        <h4>پیش‌نمایش اسامی</h4>
+                        <div class="file-preview-list" id="filePreviewList"></div>
+                    </div>
+                </section>
+
+                <!-- کنترل‌های پیشرفته -->
+                <section class="advanced-controls">
+                    <h2>تنظیمات پیشرفته قرعه‌کشی</h2>
+                    <div class="control-group">
+                        <label for="winnersCount">
+                            تعداد برندگان در هر مرحله
+                            <span class="help-tooltip">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                <span class="tooltip-text">تعیین تعداد افرادی که در هر بار قرعه‌کشی انتخاب
+                                    می‌شوند</span>
+                            </span>
+                        </label>
+                        <input type="number" id="winnersCount" min="1" value="1">
+                    </div>
+                    <div class="control-group">
+                        <label for="autoDraw">
+                            قرعه‌کشی خودکار
+                            <span class="help-tooltip">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                <span class="tooltip-text">قرعه‌کشی به صورت خودکار و با فاصله زمانی مشخص انجام
+                                    می‌شود</span>
+                            </span>
+                        </label>
+                        <input type="number" id="autoDraw" min="0" value="0"
+                            placeholder="فاصله به ثانیه (0 برای غیرفعال)">
+                    </div>
+                    <button class="btn btn-secondary" id="quickDrawBtn" disabled>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+                        </svg>
+                        قرعه‌کشی سریع
+                    </button>
+                </section>
+
+                <section class="names-section">
+                    <div class="section-header">
+                        <h2>اسامی استخراج‌شده</h2>
+                        <div style="display:flex;gap:8px;">
+                            <button class="btn" id="confirmBtn" disabled>تأیید اسامی</button>
+                            <button class="btn btn-secondary" id="clearBtn" disabled>پاک کردن</button>
+                        </div>
+                    </div>
+
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="جستجو در اسامی..." aria-label="جستجو در اسامی">
+                        <div class="search-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="names-list" id="namesList">
+                        <div class="empty-state">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                            <p>هیچ فایلی بارگذاری نشده است</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="stats-section">
+                    <h2 style="margin-bottom:15px;">آمار و گزارش</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalNames">0</div>
+                            <div class="stat-label">تعداد کل اسامی</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="winnersCount">0</div>
+                            <div class="stat-label">تعداد برندگان</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="remainingNames">0</div>
+                            <div class="stat-label">اسامی باقیمانده</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="drawCount">0</div>
+                            <div class="stat-label">تعداد قرعه‌کشی‌ها</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- نمودار -->
+                <section class="chart-container">
+                    <h2>توزیع برندگان</h2>
+                    <div class="chart" id="winnersChart">
+                        <div class="empty-state">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                            <p>داده‌ای برای نمایش وجود ندارد</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="right-panel">
+                <section class="draw-section">
+                    <h2 style="text-align:center;margin-bottom:15px;">قرعه‌کشی</h2>
+
+                    <div class="wheel-container">
+                        <div class="pointer" id="pointer"></div>
+                        <div class="wheel" id="wheel">
+                            <div class="empty-state">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                                <p>اسامی برای قرعه‌کشی نمایش داده می‌شود</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="draw-controls">
+                        <button class="btn" id="startDrawBtn" disabled aria-keyshortcuts="Enter">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                            قرعه‌کشی یک نفر
+                        </button>
+                        <button class="btn btn-secondary" id="redoBtn" disabled>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M23 4v6h-6"></path>
+                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                            </svg>
+                            قرعه‌کشی مجدد
+                        </button>
+                    </div>
+                </section>
+
+                <section class="results-section">
+                    <div class="results-header">
+                        <h2>نتایج</h2>
+                        <button class="btn btn-secondary" id="clearResultsBtn" disabled>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path
+                                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                </path>
+                            </svg>
+                            پاک کردن نتایج
+                        </button>
+                    </div>
+
+                    <div class="results-list" id="results">
+                        <div class="empty-state">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <p>نتیجه‌ای هنوز تولید نشده است</p>
+                        </div>
+                    </div>
+
+                    <!-- اقدامات نتایج -->
+                    <div class="results-actions">
+                        <button class="btn btn-secondary" id="exportExcelBtn" disabled>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                            ذخیره Excel
+                        </button>
+                        <button class="btn btn-secondary" id="copyResultsBtn" disabled>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            کپی نتایج
+                        </button>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- لودینگ -->
+    <div class="loading-overlay" id="loading">
+        <div class="loader">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <!-- هشدارها -->
+    <div id="toastHolder" aria-live="polite"></div>
+
+    <!-- کتابخانه xlsx برای خواندن اکسل -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>
